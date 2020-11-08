@@ -307,7 +307,8 @@
             let render = document.querySelector("#render")
             render.innerHTML = renderInfo(icon.cart,orcamento.valor(0), "Valor Total Aproximado")
             render.innerHTML += renderInfo(icon.file,orcamento.quantidadeDePaginasArredondadas(0), "Quantidade de Papel Gasto ", false)
-            render.innerHTML += renderInfo(icon.image,orcamento.quantidadePorPagina().portrait, "Adesivos por Pagina - Retrato", false)           
+            render.innerHTML += renderInfo(icon.image,orcamento.quantidadePorPagina().portrait, "Adesivos por Pagina - Retrato", false)  
+            render.innerHTML += renderInfo(icon.cart,orcamento.valorUnitario(0), "Valor da Unidade")         
             
 
         }

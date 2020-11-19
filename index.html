@@ -5,13 +5,70 @@
     <meta charset="utf-8" />
     <link href="dist/images/logo.svg" rel="shortcut icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description"
-        content="Ferramenta para auxilio orçamentario de adesivos para graficas personalizadas." />
-    
+    <meta name="description" content="Ferramenta para auxilio orçamentario de adesivos para graficas personalizadas." />
+
     <title>Orçamentos</title>
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="dist/css/app.css" />
     <!-- END: CSS Assets-->
+    <style>
+        #layout {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .layout {
+            box-sizing: border-box;
+            display: flex;            
+            
+        }
+
+        .layout .ctr {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+
+        }
+        .item{
+            color: black;
+        }
+
+        .layout .ctr .item {
+            box-sizing: border-box;
+            border: 1px solid black;
+
+        }
+
+        .layout .side {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .layout .side .item {
+            box-sizing: border-box;
+            border: 1px solid black;
+
+        }
+
+        .bottom {
+            top: 0;
+            margin-top: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+
+        }
+
+        .bottom .item {
+            box-sizing: border-box;
+            border: 1px solid black;
+
+        }
+    </style>
 </head>
 <!-- END: Head -->
 
@@ -142,8 +199,19 @@
                                             <div class="accordion" style="margin-top: 10px; margin-bottom: 10px">
                                                 <div
                                                     class="accordion__pane border-b border-gray-200 dark:border-dark-5 pb-4">
+
                                                     <a href="javascript:;"
-                                                        class="accordion__pane__toggle font-medium block">Opções</a>
+                                                        class="accordion__pane__toggle font-medium block"
+                                                        style="display: flex;">Opções <svg
+                                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="feather feather-chevron-down side-menu__sub-icon">
+                                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                                        </svg> </a>
+
+
                                                     <div
                                                         class="accordion__pane__content mt-3 text-gray-700 dark:text-gray-600 leading-relaxed">
                                                         <div class="grid grid-cols-3 gap-2">
@@ -176,11 +244,11 @@
                                                                     </div>
                                                                     <input type="text" name="sangria"
                                                                         class="input pl-12 w-full border col-span-4"
-                                                                        placeholder="Sangria" id="sangria" value="1"
+                                                                        placeholder="Sangria" id="sangria" value="0"
                                                                         style="text-align: end;" />
                                                                 </div>
                                                                 <div class="text-xs text-gray-600 mt-2">
-                                                                    O Valor padrão será de 1CM de margem
+                                                                    O Valor padrão será de 0CM de margem
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -196,7 +264,7 @@
                                                                         style="text-align: end;" />
                                                                 </div>
                                                                 <div class="text-xs text-gray-600 mt-2">
-                                                                    O Valor padrão será de R$7,00 , (para
+                                                                    O Valor padrão será de R$7,50 , (para
                                                                     Usuarios Finais o orçamento poderá ser
                                                                     refeito)
                                                                 </div>
@@ -227,8 +295,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div>
+
+                                                <div class="flex"
+                                                    style="flex-direction: row; margin:0; justify-content: flex-end;">
+                                                    <div class="flex items-end"
+                                                        style="flex-direction: column; margin-right: 10px;"
+                                                        id="renderLayout">
+
+                                                    </div>
+
                                                     <div class="flex items-end" style="flex-direction: column">
+
                                                         <label style="color: transparent">Gerar</label>
                                                         <button class="button bg-theme-9 text-white" id="gerar">
                                                             Gerar Orçamento
@@ -242,13 +319,21 @@
                             </div>
                         </form>
                         <div>
+                            <div class="intro-y flex items-center h-10" id="titleRender">
+
+                            </div>
                             <div class="grid grid-cols-12 gap-6 mt-5" id="render">
-                                                             
+
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
+            </div>
+        </div>
+        <div class="modal" id="superlarge-modal-size-preview">
+            <div class="modal__content modal__content--xl p-10 text-center">
+                <div id="layout"></div>
             </div>
         </div>
         <!-- END: Content -->
@@ -257,9 +342,9 @@
     <script src="dist/js/orcamento.js"></script>
     <script>
         let form = document.querySelectorAll("input[name]");
-        let icon = { 
-            file : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text report-box__icon text-theme-9"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
-            cart : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`,
+        let icon = {
+            file: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text report-box__icon text-theme-9"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+            cart: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart report-box__icon text-theme-10"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>`,
             image: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image report-box__icon text-theme-8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>`,
         }
 
@@ -282,39 +367,115 @@
 
 
             if (data["altura"])
-                data["altura"] = Number.parseFloat(data["altura"].replace(",", "."))
+                data["altura"] = Number.parseFloat(data["altura"].replace(",", "."));
+            else
+                data["altura"] = 4;
 
             if (data["largura"])
                 data["largura"] = Number.parseFloat(data["largura"].replace(",", "."))
+            else
+                data["largura"] = 4;
 
             if (data["valor"])
                 data["valor"] = Number.parseFloat(data["valor"].replace(",", "."))
+            else
+                data["valor"] = 7.50;
 
             if (data["sangria"])
                 data["sangria"] = Number.parseFloat(data["sangria"].replace(",", "."))
+            else
+                data["sangria"] = 0
 
             if (data["quantidade"])
                 data["quantidade"] = Number.parseFloat(data["quantidade"].replace(",", "."))
+                else 
+                data["quantidade"] = 1
 
             if (data["tipo"] && Number.parseInt(data["tipo"]) == 0) {
+                if(data.quantidade <= 100)
                 data.valor += 5;
+                else if(data.quantidade > 100 && data.quantidade <= 150)
+                data.valor += 4;
+                else if(data.quantidade > 150 && data.quantidade <= 250)
+                data.valor += 3;
+                else if(data.quantidade > 250 )
+                data.valor += 2;
+                
+            }else{
+                if(data.quantidade <= 200)
+                data.valor += 0.83333;
+                else if(data.quantidade > 200)
+                data.valor += 0.5;
+                
             }
 
-            var orcamento = new Orcamento({altura: data.altura,largura: data.largura }, data.papel, data.quantidade, data.valor) 
+            var orcamento = new Orcamento({
+                altura: data.altura,
+                largura: data.largura
+            }, {
+                papel: data.papel,
+                quantidadePedida: data.quantidade,
+                valorPagina: data.valor,
+                sangria: data.sangria
+            })
 
             let render = document.querySelector("#render")
-            render.innerHTML = renderInfo(icon.cart,orcamento.valor(0), "Valor Total Aproximado")
-            render.innerHTML += renderInfo(icon.file,orcamento.quantidadeDePaginasArredondadas(0), "Quantidade de Papel Gasto ", false)
-            render.innerHTML += renderInfo(icon.image,orcamento.quantidadePorPagina().portrait, "Adesivos por Pagina - Retrato", false)  
-            render.innerHTML += renderInfo(icon.cart,orcamento.valorUnitario(0), "Valor da Unidade")         
-            
+
+
+            document.querySelector("#renderLayout").innerHTML = `<label style="color: transparent">Layout</label>
+                                                        <a href="javascript:;" data-toggle="modal"
+                                                            data-target="#superlarge-modal-size-preview"
+                                                            class="button bg-theme-1 text-white">Mostrar Layout</a>`;
+
+
+            let valor = orcamento.getQuantidadePorPaginaRetrato().info.total >= orcamento.getQuantidadePorPaginaPaisagem().info.total ? "r" : "p";
+            console.log( orcamento.getQuantidadePorPaginaRetrato())
+            console.log( orcamento.getQuantidadePorPaginaPaisagem())
+            let lay = document.querySelector("#layout")
+            if (valor == "r") {
+                document.querySelector("#titleRender").innerHTML = `
+                                <h2 class="text-lg font-medium truncate mr-5 mt-5">
+                                    Impressão no Modo Retrato
+                                </h2>                                
+                            `;
+
+                render.innerHTML = renderInfo(icon.cart, orcamento.getValorRetrato(), "Valor Total Aproximado")
+                render.innerHTML += renderInfo(icon.file, orcamento.getQuantidadeDePaginasArredondadasRetrato(),
+                    "Quantidade de Papel Gasto ", false)
+                render.innerHTML += renderInfo(icon.image, orcamento.getQuantidadePorPaginaRetrato().info.total,
+                    "Adesivos por Pagina", false)
+                render.innerHTML += renderInfo(icon.cart, orcamento.getValorUnitarioRetrato(), "Valor da Unidade")
+
+                lay.innerHTML = renderLayout(orcamento.getQuantidadePorPaginaRetrato().info,orcamento.getQuantidadePorPaginaPaisagem().altura, orcamento.getQuantidadePorPaginaPaisagem().largura)
+            } else {
+                document.querySelector("#titleRender").innerHTML = `
+                                <h2 class="text-lg font-medium truncate mr-5 mt-5">
+                                    Impressão no Modo Paisagem
+                                </h2>                                
+                            `;
+                render.innerHTML = renderInfo(icon.cart, orcamento.getValorPaisagem(), "Valor Total Aproximado")
+                render.innerHTML += renderInfo(icon.file, orcamento.getQuantidadeDePaginasArredondadasPaisagem(),
+                    "Quantidade de Papel Gasto ", false)
+                render.innerHTML += renderInfo(icon.image, orcamento.getQuantidadePorPaginaPaisagem().info.total,
+                    "Adesivos por Pagina ", false)
+                render.innerHTML += renderInfo(icon.cart, orcamento.getValorUnitarioPaisagem(), "Valor da Unidade")
+                lay.innerHTML = renderLayout(orcamento.getQuantidadePorPaginaPaisagem().info, orcamento.getQuantidadePorPaginaPaisagem().largura, orcamento.getQuantidadePorPaginaPaisagem().altura)
+            }
+
+
+           
+           
+
 
         }
 
 
-        function renderInfo(ico, valor, descricao, ehMoeda=true){
-            if(ehMoeda)
-            valor = Intl.NumberFormat("pt-BR",{style: "currency",currency: "BRL"}).format(valor)
+        function renderInfo(ico, valor, descricao, ehMoeda = true) {
+            if (ehMoeda)
+                valor = Intl.NumberFormat("pt-BR", {
+                    style: "currency",
+                    currency: "BRL"
+                }).format(valor)
             let text = ` <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                                     <div class="report-box zoom-in">
                                         <div class="box p-5">
@@ -326,9 +487,53 @@
                                         </div>
                                     </div>
                                 </div> `;
-                                return text;
+            return text;
         }
 
+
+        function renderLayout(info, largura, altura) {
+            document.querySelector("#layout").style.width = info.papel.largura + "cm";
+            document.querySelector("#layout").style.height = info.papel.altura + "cm";
+            let count = 1;
+            let ctr = "<div class='layout'";
+            ctr += `<div style='width:${info.largura * largura}cm; height: ${info.altura * altura}cm'>`
+                ctr+="<div>"
+            for (let i = 0; i < info.altura; i++) {
+                ctr += "<div class='ctr'>"
+                for (let j = 0; j < info.largura; j++) {
+                    ctr += `<div class='item' style="width:${largura}cm; height:${altura}cm">${count}</div>`;
+                    count++
+                }
+                ctr += "</div>"
+            }
+            ctr+="</div>"
+            let side = "";
+            if (info.inverse.side > 0) {
+                side = "<div class='side'>"
+                for (let i = 0; i < info.inverse.side; i++) {
+                    side += `<div class='item' style="width:${altura}cm; height:${largura}cm">${count}</div>`;
+                    count++
+                }
+                side += "</div>";
+            }
+           
+            ctr += side;
+
+            let bottom = "";
+            if (info.inverse.bottom > 0) {
+                console.log(info)
+                bottom = "<div class='bottom'>"
+                for (let i = 0; i < info.inverse.bottom; i++) {
+                    bottom += `<div class='item' style="width:${altura}cm; height:${largura}cm">${count}</div>`
+                    count++
+                }
+                bottom += "</div>"
+            }
+
+            ctr += "</div>";
+            ctr += bottom;
+            return ctr
+        }
 
 
         document.querySelector("#gerar").addEventListener("click", gerar);
